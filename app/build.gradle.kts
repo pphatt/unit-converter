@@ -31,23 +31,40 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         compose = true
     }
+
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.8"
     }
+
     packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+        resources.excludes.addAll(
+            listOf(
+                "META-INF/DEPENDENCIES",
+                "LICENSE.txt",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/README.md",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/ASL2.0",
+                "META-INF/*.kotlin_module",
+                // temporary solution
+                "META-INF/gradle/incremental.annotation.processors"
+            ),
+        )
     }
 }
 
