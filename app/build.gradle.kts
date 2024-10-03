@@ -69,6 +69,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":presentation-core"))
 
     // Compose
     implementation(compose.activity)

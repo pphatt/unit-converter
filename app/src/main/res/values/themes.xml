@@ -1,5 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.UnitConverter" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--============-->
+    <!-- Base Theme -->
+    <!--============-->
+
+    <!--== Theme Base ==-->
+    <style name="Base.Theme.UnitConverter" parent="Theme.Material3.DayNight.NoActionBar">
+<!--        &lt;!&ndash; Disallow "Force dark theme" &ndash;&gt;-->
+<!--        <item name="android:forceDarkAllowed" tools:targetApi="Q">false</item>-->
+
+<!--        &lt;!&ndash; Theme Colors &ndash;&gt;-->
+<!--        <item name="colorPrimary">@color/tachiyomi_primary</item>-->
+<!--        <item name="colorOnPrimary">@color/tachiyomi_onPrimary</item>-->
+<!--        <item name="colorPrimaryContainer">@color/tachiyomi_primaryContainer</item>-->
+<!--        <item name="colorOnPrimaryContainer">@color/tachiyomi_onPrimaryContainer</item>-->
+<!--        <item name="colorPrimaryInverse">@color/tachiyomi_inversePrimary</item>-->
+<!--        <item name="colorSecondary">@color/tachiyomi_secondary</item>-->
+<!--        <item name="colorOnSecondary">@color/tachiyomi_onSecondary</item>-->
+<!--        <item name="colorSecondaryContainer">@color/tachiyomi_secondaryContainer</item>-->
+<!--        <item name="colorOnSecondaryContainer">@color/tachiyomi_onSecondaryContainer</item>-->
+<!--        <item name="colorTertiary">@color/tachiyomi_tertiary</item>-->
+<!--        <item name="colorOnTertiary">@color/tachiyomi_onTertiary</item>-->
+<!--        <item name="colorTertiaryContainer">@color/tachiyomi_tertiaryContainer</item>-->
+<!--        <item name="colorOnTertiaryContainer">@color/tachiyomi_onTertiaryContainer</item>-->
+<!--        <item name="android:colorBackground">@color/tachiyomi_background</item>-->
+<!--        <item name="colorOnBackground">@color/tachiyomi_onBackground</item>-->
+<!--        <item name="colorSurface">@color/tachiyomi_surface</item>-->
+<!--        <item name="colorOnSurface">@color/tachiyomi_onSurface</item>-->
+<!--        <item name="colorSurfaceVariant">@color/tachiyomi_surfaceVariant</item>-->
+<!--        <item name="colorOnSurfaceVariant">@color/tachiyomi_onSurfaceVariant</item>-->
+<!--        <item name="elevationOverlayColor">@color/tachiyomi_surfaceTint</item>-->
+<!--        <item name="colorSurfaceInverse">@color/tachiyomi_inverseSurface</item>-->
+<!--        <item name="colorOnSurfaceInverse">@color/tachiyomi_inverseOnSurface</item>-->
+<!--        <item name="colorError">@color/tachiyomi_error</item>-->
+<!--        <item name="colorOnError">@color/tachiyomi_onError</item>-->
+<!--        <item name="colorErrorContainer">@color/tachiyomi_errorContainer</item>-->
+<!--        <item name="colorOnErrorContainer">@color/tachiyomi_onErrorContainer</item>-->
+<!--        <item name="colorOutline">@color/tachiyomi_outline</item>-->
+<!--        <item name="colorOutlineVariant">@color/tachiyomi_outlineVariant</item>-->
+<!--        <item name="colorSurfaceContainer">@color/tachiyomi_surfaceContainer</item>-->
+<!--        <item name="colorSurfaceContainerHigh">@color/tachiyomi_surfaceContainerHigh</item>-->
+<!--        <item name="colorSurfaceContainerHighest">@color/tachiyomi_surfaceContainerHighest</item>-->
+<!--        <item name="colorSurfaceContainerLow">@color/tachiyomi_surfaceContainerLow</item>-->
+<!--        <item name="colorSurfaceContainerLowest">@color/tachiyomi_surfaceContainerLowest</item>-->
+
+<!--        <item name="android:divider">@color/divider_default</item>-->
+<!--        &lt;!&ndash;        <item name="android:listDivider">@drawable/line_divider</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <item name="materialDividerStyle">@style/Widget.Tachiyomi.MaterialDivider</item>&ndash;&gt;-->
+
+<!--        &lt;!&ndash; Ripples &ndash;&gt;-->
+<!--        <item name="colorControlHighlight">?attr/colorSurfaceVariant</item>-->
+
+<!--        &lt;!&ndash; Handles RTL Text &ndash;&gt;-->
+<!--        <item name="android:textAlignment">gravity</item>-->
+<!--        <item name="android:textDirection">locale</item>-->
+
+<!--        &lt;!&ndash; Themes &ndash;&gt;-->
+<!--        <item name="android:windowLightStatusBar">true</item>-->
+<!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+<!--        <item name="android:navigationBarColor">@color/amoled_surface</item>-->
+<!--        <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">@null</item>-->
+<!--        <item name="android:enforceNavigationBarContrast" tools:targetApi="Q">false</item>-->
+<!--        <item name="android:enforceStatusBarContrast" tools:targetApi="Q">false</item>-->
+<!--        &lt;!&ndash;        <item name="android:itemTextAppearance">@style/TextAppearance.Widget.Menu</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Tachiyomi.MaterialAlertDialog</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <item name="alertDialogTheme">@style/ThemeOverlay.Tachiyomi.MaterialAlertDialog</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <item name="textAppearanceButton">@style/TextAppearance.Widget.Button</item>&ndash;&gt;-->
+<!--        <item name="android:buttonStyle">?attr/borderlessButtonStyle</item>-->
+<!--        <item name="android:backgroundDimAmount">0.32</item>-->
+<!--        <item name="windowActionModeOverlay">true</item>-->
+<!--        &lt;!&ndash;        <item name="actionOverflowButtonStyle">@style/Theme.Tachiyomi.ActionButton.Overflow</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <item name="preferenceTheme">@style/PreferenceThemeOverlay.Tachiyomi</item>&ndash;&gt;-->
+<!--        <item name="textInputStyle">@style/Widget.Material3.TextInputLayout.OutlinedBox</item>-->
+<!--        <item name="appBarLayoutStyle">@style/Widget.Material3.AppBarLayout</item>-->
+<!--        <item name="toolbarStyle">@style/Widget.Material3.Toolbar.Surface</item>-->
+<!--        &lt;!&ndash;        <item name="switchStyle">@style/Widget.Tachiyomi.Switch</item>&ndash;&gt;-->
+<!--        <item name="materialSwitchStyle">@style/Widget.Material3.CompoundButton.MaterialSwitch-->
+<!--        </item>-->
+<!--        &lt;!&ndash;        <item name="switchPreferenceCompatStyle">@style/Widget.Tachiyomi.Switch</item>&ndash;&gt;-->
+<!--        <item name="materialCardViewStyle">@style/Widget.Material3.CardView.Elevated</item>-->
+
+<!--        &lt;!&ndash; Preference text appearance &ndash;&gt;-->
+<!--        <item name="android:textAppearanceListItem">?attr/textAppearanceBodyLarge</item>-->
+<!--        &lt;!&ndash;        <item name="android:textAppearanceListItemSecondary">@style/TextAppearance.Tachiyomi.Preference.Secondary</item>&ndash;&gt;-->
+    </style>
+
+    <!--== Default Theme ==-->
+    <style name="Theme.UnitConverter" parent="Base.Theme.UnitConverter" />
 </resources>

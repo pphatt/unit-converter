@@ -42,3 +42,4 @@ dependencyResolutionManagement {
 rootProject.name = "Unit Converter"
 include(":app")
 include(":presentation-core")
+include(":domain")
