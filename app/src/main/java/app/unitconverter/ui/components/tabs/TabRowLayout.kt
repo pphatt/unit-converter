@@ -2,6 +2,8 @@ package app.unitconverter.ui.components.tabs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +41,7 @@ fun TabRowLayout(
                 modifier = Modifier
                     .zIndex(1f)
                     .wrapContentSize()
+                    .height(30.dp)
                     .clip(shape = RoundedCornerShape(50))
                     .background(
                         color = if (selectedIndex == index) Color(0xFF1B1B1B) else Color.Transparent,
@@ -55,7 +58,7 @@ fun TabRowLayout(
                 text = {
                     Text(
                         text = currentTab.text,
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         fontWeight = if (selectedIndex == index) FontWeight.Bold else FontWeight.Normal
                     )
                 },

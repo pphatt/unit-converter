@@ -9,15 +9,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -61,12 +61,12 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                             .padding(
                                 top = paddingValues.calculateTopPadding(),
-                                bottom = 0.dp,
+                                bottom = 10.dp,
                                 start = paddingValues.calculateStartPadding(LayoutDirection.Rtl),
                                 end = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
                             )
                     ) {
-                        Column(modifier = Modifier.weight(0.5f)) {
+                        Column(modifier = Modifier.weight(0.54f)) {
                             TabRowLayout(
                                 scope = scope,
                                 selectedIndex = tabIndex.value,
@@ -78,11 +78,34 @@ class MainActivity : ComponentActivity() {
                                     .fillMaxWidth()
                                     .weight(1f)
                             ) { page ->
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(
+                                            top = 10.dp,
+                                            end = 16.dp,
+                                            bottom = 10.dp,
+                                            start = 16.dp
+                                        )
                                 ) {
-                                    Text(text = ETabs.entries[page].text)
+                                    HorizontalDivider(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        thickness = 1.dp
+                                    )
+
+                                    Box(
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .fillMaxWidth(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(text = ETabs.entries[page].text)
+                                    }
+
+                                    HorizontalDivider(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        thickness = 1.dp
+                                    )
                                 }
                             }
                         }
@@ -90,8 +113,7 @@ class MainActivity : ComponentActivity() {
                         Column(
                             verticalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier
-                                .weight(0.5f)
-                                .height(IntrinsicSize.Min)
+                                .weight(0.46f)
                                 .fillMaxWidth()
                                 .padding(
                                     top = 0.dp, bottom = 0.dp, start = 16.dp, end = 16.dp
