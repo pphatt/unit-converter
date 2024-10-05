@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,17 +22,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import app.unitconverter.screen.area.AreaScreen
+import app.unitconverter.screen.length.LengthScreen
 import app.unitconverter.ui.components.common.KeyboardLayout
 import app.unitconverter.ui.components.tabs.TabRowLayout
 import app.unitconverter.ui.theme.UnitConverterTheme
-import app.unitconverter.ui.theme.primaryContainerDark
 import komikku.presentation.domain.enums.ETabs
 
 class MainActivity : ComponentActivity() {
@@ -49,7 +54,8 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.surface) // this is hidden under the content UI
-                    .systemBarsPadding(), topBar = {
+                    .systemBarsPadding()
+                    .padding(start = 5.dp), topBar = {
                     TopAppBar(title = {
                         Text(
                             text = "Unit converter", fontWeight = FontWeight.Bold
@@ -82,29 +88,27 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .padding(
-                                            top = 10.dp,
-                                            end = 16.dp,
-                                            bottom = 10.dp,
-                                            start = 16.dp
+                                            top = 10.dp, end = 16.dp, bottom = 10.dp, start = 16.dp
                                         )
                                 ) {
                                     HorizontalDivider(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        thickness = 1.dp
+                                        modifier = Modifier.fillMaxWidth(), thickness = 1.dp
                                     )
 
-                                    Box(
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .fillMaxWidth(),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(text = ETabs.entries[page].text)
+                                    when (page) {
+                                        0 -> {
+                                            LengthScreen(
+                                                modifier = Modifier.weight(1f),
+                                            )
+                                        }
+
+                                        1 -> {
+                                            AreaScreen(modifier = Modifier.weight(1f))
+                                        }
                                     }
 
                                     HorizontalDivider(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        thickness = 1.dp
+                                        modifier = Modifier.fillMaxWidth(), thickness = 1.dp
                                     )
                                 }
                             }
@@ -116,7 +120,7 @@ class MainActivity : ComponentActivity() {
                                 .weight(0.46f)
                                 .fillMaxWidth()
                                 .padding(
-                                    top = 0.dp, bottom = 0.dp, start = 16.dp, end = 16.dp
+                                    top = 20.dp, bottom = 0.dp, start = 16.dp, end = 16.dp
                                 )
                         ) {
                             KeyboardLayout()

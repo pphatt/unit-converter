@@ -48,8 +48,8 @@ fun KeyboardLayout() {
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Icon(
                 modifier = Modifier
-                    .height(30.dp)
-                    .width(30.dp),
+                    .height(32.dp)
+                    .width(32.dp),
                 imageVector = Delete,
                 contentDescription = "",
                 tint = Color(0xFF916B53)
@@ -111,8 +111,8 @@ fun KeyboardLayout() {
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Icon(
                 modifier = Modifier
-                    .height(30.dp)
-                    .width(30.dp),
+                    .height(32.dp)
+                    .width(32.dp),
                 imageVector = ArrowUp,
                 contentDescription = "",
                 tint = Color(0xFF916B53)
@@ -149,8 +149,8 @@ fun KeyboardLayout() {
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Icon(
                 modifier = Modifier
-                    .height(30.dp)
-                    .width(30.dp),
+                    .height(32.dp)
+                    .width(32.dp),
                 imageVector = ArrowDown,
                 contentDescription = "",
                 tint = Color(0xFF916B53)
