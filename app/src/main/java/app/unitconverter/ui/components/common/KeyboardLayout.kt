@@ -4,13 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -22,7 +19,11 @@ import app.unitconverter.ui.components.icons.Delete
 import app.unitconverter.ui.components.icons.PlusSlashMinus
 
 @Composable
-fun KeyboardLayout() {
+fun KeyboardLayout(
+    onKeyClick: (String) -> Unit,
+    onClearClick: () -> Unit,
+    onDeleteClick: () -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(Measure.buttonSpacing)
@@ -31,19 +32,19 @@ fun KeyboardLayout() {
             Text(
                 text = "7", fontSize = 32.sp
             )
-        }, onClick = {})
+        }, onClick = { onKeyClick("7") })
 
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Text(
                 text = "8", fontSize = 32.sp
             )
-        }, onClick = {})
+        }, onClick = { onKeyClick("8") })
 
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Text(
                 text = "9", fontSize = 32.sp
             )
-        }, onClick = {})
+        }, onClick = { onKeyClick("9") })
 
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Icon(
@@ -54,7 +55,7 @@ fun KeyboardLayout() {
                 contentDescription = "",
                 tint = Color(0xFF916B53)
             )
-        }, onClick = {})
+        }, onClick = onDeleteClick)
     }
 
     Row(
@@ -65,25 +66,25 @@ fun KeyboardLayout() {
             Text(
                 text = "4", fontSize = 32.sp
             )
-        }, onClick = {})
+        }, onClick = { onKeyClick("4") })
 
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Text(
                 text = "5", fontSize = 32.sp
             )
-        }, onClick = {})
+        }, onClick = { onKeyClick("5") })
 
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Text(
                 text = "6", fontSize = 32.sp
             )
-        }, onClick = {})
+        }, onClick = { onKeyClick("6") })
 
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Text(
                 text = "C", fontSize = 32.sp, color = Color(0xFF9E2B24)
             )
-        }, onClick = {})
+        }, onClick = onClearClick)
     }
 
     Row(
@@ -94,19 +95,19 @@ fun KeyboardLayout() {
             Text(
                 text = "1", fontSize = 32.sp
             )
-        }, onClick = {})
+        }, onClick = { onKeyClick("1") })
 
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Text(
                 text = "2", fontSize = 32.sp
             )
-        }, onClick = {})
+        }, onClick = { onKeyClick("2") })
 
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Text(
                 text = "3", fontSize = 32.sp
             )
-        }, onClick = {})
+        }, onClick = { onKeyClick("3") })
 
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Icon(
@@ -138,13 +139,13 @@ fun KeyboardLayout() {
             Text(
                 text = "0", fontSize = 32.sp
             )
-        }, onClick = {})
+        }, onClick = { onKeyClick("0") })
 
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Text(
                 text = ",", fontSize = 32.sp
             )
-        }, onClick = {})
+        }, onClick = { onKeyClick(",") })
 
         AppDefaultButton(modifier = Modifier.weight(1f), content = {
             Icon(

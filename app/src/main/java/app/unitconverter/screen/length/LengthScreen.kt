@@ -1,45 +1,88 @@
 package app.unitconverter.screen.length
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import app.unitconverter.ui.components.common.DropdownMenu
 import app.unitconverter.ui.components.common.NumberInputField
+
+data class InputWithUnit(
+    var value: String,
+    var symbol: String
+)
 
 @Composable
 fun LengthScreen(
     modifier: Modifier,
 ) {
-    var inputValue by remember { mutableStateOf("1") }
+    // LengthScreen inputs state
+    var IInputValue by remember { mutableStateOf(InputWithUnit("1", "m")) }
+    var OInputValue by remember { mutableStateOf(InputWithUnit("100", "cm")) }
 
-    var iExpanded by remember { mutableStateOf(false) }
-    var oExpanded by remember { mutableStateOf(false) }
+    // LengthScreen unit state
+    var IUnitSelectValue by rememberSaveable {
+        mutableStateOf("Metres")
+    }
 
-    var inputUnitOne by remember { mutableStateOf("Meters") }
-    var inputUnitTwo by remember { mutableStateOf("CentiMeters") }
+    var OUnitSelectValue by rememberSaveable {
+        mutableStateOf("Centimetres")
+    }
+
+    // Focus states
+    var IFocusedState by remember { mutableStateOf(false) }
+    var OFocusedState by remember { mutableStateOf(false) }
+
+    fun convertLength(value: Double, fromUnit: String, toUnit: String): Double {
+        return when (fromUnit to toUnit) {
+            "Meters" to "CentiMeters" -> value * 100
+            "Meters" to "Feet" -> value * 3.28084
+            "Meters" to "MilliMeters" -> value * 1000
+            "CentiMeters" to "Meters" -> value / 100
+            "CentiMeters" to "Feet" -> value * 0.0328084
+            "CentiMeters" to "MilliMeters" -> value * 10
+            "Feet" to "Meters" -> value / 3.28084
+            "Feet" to "CentiMeters" -> value * 30.48
+            "Feet" to "MilliMeters" -> value * 304.8
+            "MilliMeters" to "Meters" -> value / 1000
+            "MilliMeters" to "CentiMeters" -> value / 10
+            "MilliMeters" to "Feet" -> value / 304.8
+            else -> value // If no conversion needed or unknown unit
+        }
+    }
+
+//    fun updateInputValues(key: String) {
+//        when (tabIndex.value) {
+//            0 -> {
+//                if (isFirstInputFocused) {
+//                    lengthInputValueOne += key
+//                    lengthInputValueTwo = convertLength(
+//                        lengthInputValueOne.toDoubleOrNull() ?: 0.0,
+//                        lengthUnitFirstInput,
+//                        lengthUnitSecondInput
+//                    ).toString()
+//                } else {
+//                    lengthInputValueTwo += key
+//                    lengthInputValueOne = convertLength(
+//                        lengthInputValueTwo.toDoubleOrNull() ?: 0.0,
+//                        lengthUnitSecondInput,
+//                        lengthUnitFirstInput
+//                    ).toString()
+//                }
+//            }
+//        }
+//    }
 
     Column(
         modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceEvenly
@@ -50,44 +93,17 @@ fun LengthScreen(
                 .weight(1f),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            Box {
-                Button(
-                    modifier = Modifier.padding(0.dp),
-                    onClick = { iExpanded = true },
-                    colors = ButtonDefaults.filledTonalButtonColors(
-                        containerColor = Color(0xFF1B1B1B),
-                    )
-                ) {
-                    Text(text = inputUnitOne, fontSize = 15.sp)
-                    Icon(Icons.Default.ArrowDropDown, contentDescription = "Arrow Down")
-                }
+            DropdownMenu(
+                IUnitSelectValue = IUnitSelectValue,
+                onUnitSelect = { IUnitSelectValue = it }
+            )
 
-                DropdownMenu(modifier = Modifier,
-                    expanded = iExpanded,
-                    onDismissRequest = { iExpanded = false }) {
-                    DropdownMenuItem(text = { Text("CentiMeters") }, onClick = {
-                        iExpanded = false
-                        inputUnitOne = "CentiMeters"
-                    })
-
-                    DropdownMenuItem(text = { Text("Meters") }, onClick = {
-                        iExpanded = false
-                        inputUnitOne = "Meters"
-                    })
-
-                    DropdownMenuItem(text = { Text("Feet") }, onClick = {
-                        iExpanded = false
-                        inputUnitOne = "Feet"
-                    })
-
-                    DropdownMenuItem(text = { Text("MilliMeters") }, onClick = {
-                        iExpanded = false
-                        inputUnitOne = "MilliMeters"
-                    })
-                }
-            }
-
-            NumberInputField(value = inputValue)
+            NumberInputField(
+                modifier = Modifier.onFocusChanged { IFocusedState = it.isFocused },
+                value = IInputValue,
+                onValueChange = { string ->
+                    IInputValue = IInputValue.copy(value = string)
+                })
         }
 
         HorizontalDivider(
@@ -100,44 +116,15 @@ fun LengthScreen(
                 .weight(1f),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            Box {
-                Button(
-                    modifier = Modifier.padding(0.dp),
-                    onClick = { oExpanded = true },
-                    colors = ButtonDefaults.filledTonalButtonColors(
-                        containerColor = Color(0xFF1B1B1B),
-                    )
-                ) {
-                    Text(text = inputUnitTwo, fontSize = 15.sp)
-                    Icon(Icons.Default.ArrowDropDown, contentDescription = "Arrow Down")
-                }
+            DropdownMenu(
+                IUnitSelectValue = OUnitSelectValue,
+                onUnitSelect = { OUnitSelectValue = it }
+            )
 
-                DropdownMenu(modifier = Modifier,
-                    expanded = oExpanded,
-                    onDismissRequest = { oExpanded = false }) {
-                    DropdownMenuItem(text = { Text("CentiMeters") }, onClick = {
-                        oExpanded = false
-                        inputUnitTwo = "CentiMeters"
-                    })
-
-                    DropdownMenuItem(text = { Text("Meters") }, onClick = {
-                        oExpanded = false
-                        inputUnitTwo = "Meters"
-                    })
-
-                    DropdownMenuItem(text = { Text("Feet") }, onClick = {
-                        oExpanded = false
-                        inputUnitTwo = "Feet"
-                    })
-
-                    DropdownMenuItem(text = { Text("MilliMeters") }, onClick = {
-                        oExpanded = false
-                        inputUnitTwo = "MilliMeters"
-                    })
-                }
-            }
-
-            NumberInputField(value = inputValue)
+            NumberInputField(
+                modifier = Modifier.onFocusChanged { OFocusedState = it.isFocused },
+                value = OInputValue,
+                onValueChange = { OInputValue = OInputValue.copy(value = it) })
         }
     }
 }

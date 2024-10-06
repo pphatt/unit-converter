@@ -1,64 +1,68 @@
 package app.unitconverter.ui.components.common
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.InterceptPlatformTextInput
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.awaitCancellation
-
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable fun DisableSoftKeyboard(
-    disable: Boolean = true,
-    content: @Composable () -> Unit,
-) {
-    InterceptPlatformTextInput(
-        interceptor = { request, nextHandler ->
-            if (!disable) {
-                nextHandler.startInputMethod(request)
-            } else {
-                awaitCancellation()
-            }
-        },
-        content = content,
-    )
-}
+import app.unitconverter.screen.length.InputWithUnit
+import app.unitconverter.ui.theme.LocalColorScheme
 
 @Composable
 fun NumberInputField(
-    modifier: Modifier = Modifier, value: String
+    modifier: Modifier = Modifier,
+    value: InputWithUnit,
+    onValueChange: (String) -> Unit,
 ) {
-    CompositionLocalProvider(
-        LocalLayoutDirection provides LayoutDirection.Rtl,
+    Row(
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        DisableSoftKeyboard {
-            OutlinedTextField(
-                modifier = modifier
-                    .fillMaxWidth(),
-                value = value,
-                onValueChange = {},
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent
-                ),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Decimal,
-                    imeAction = ImeAction.Default,
-                ),
-                textStyle = TextStyle.Default.copy(fontSize = 30.sp)
+        OutlinedTextField(
+            modifier = modifier
+                .weight(1f),
+            value = value.value,
+            onValueChange = { newValue ->
+                val pattern = Regex("[\\d,]*[.]?[\\d,]*")
+
+                if (newValue.isEmpty() || newValue.matches(pattern)) {
+                    onValueChange(newValue)
+                }
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+            ),
+            textStyle = TextStyle.Default.copy(
+                color = LocalColorScheme.current.foreground,
+                fontSize = 30.sp,
+                textDirection = TextDirection.ContentOrRtl
             )
-        }
+        )
+
+        Text(
+            modifier = Modifier.padding(top = 8.dp),
+            text = value.symbol,
+            color = LocalColorScheme.current.foreground,
+            fontSize = 20.sp,
+        )
     }
 }
