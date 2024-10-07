@@ -51,6 +51,11 @@ fun LengthScreen(
             "Centimetres" -> value / 100
             "Feet" -> value / 3.28084
             "Millimetres" -> value / 1000
+            "Kilometres" -> value * 1000
+            "Inches" -> value / 39.3701
+            "Yards" -> value / 1.09361
+            "Miles" -> value * 1609.34
+            "NauticalMiles" -> value * 1852
             else -> value
         }
 
@@ -59,6 +64,11 @@ fun LengthScreen(
             "Centimetres" -> valueInMeters * 100
             "Feet" -> valueInMeters * 3.28084
             "Millimetres" -> valueInMeters * 1000
+            "Kilometres" -> valueInMeters / 1000
+            "Inches" -> valueInMeters * 39.3701
+            "Yards" -> valueInMeters * 1.09361
+            "Miles" -> valueInMeters / 1609.34
+            "NauticalMiles" -> valueInMeters / 1852
             else -> valueInMeters
         }
 
