@@ -17,10 +17,11 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
 import app.unitconverter.ui.components.common.DropdownMenu
 import app.unitconverter.ui.components.common.NumberInputField
+import kotlin.math.pow
+import kotlin.math.round
 
 data class InputWithUnit(
-    var value: String,
-    var symbol: String
+    var value: String, var symbol: String
 )
 
 @Composable
@@ -28,61 +29,52 @@ fun LengthScreen(
     modifier: Modifier,
 ) {
     // LengthScreen inputs state
-    var IInputValue by remember { mutableStateOf(InputWithUnit("1", "m")) }
-    var OInputValue by remember { mutableStateOf(InputWithUnit("100", "cm")) }
+    var IInputValue by remember { mutableStateOf("1") }
+    var OInputValue by remember { mutableStateOf("100") }
 
     // LengthScreen unit state
-    var IUnitSelectValue by rememberSaveable {
-        mutableStateOf("Metres")
+    var IUnitSelectValue by remember {
+        mutableStateOf(InputWithUnit("Metres", "m"))
     }
 
-    var OUnitSelectValue by rememberSaveable {
-        mutableStateOf("Centimetres")
+    var OUnitSelectValue by remember {
+        mutableStateOf(InputWithUnit("Centimetres", "cm"))
     }
 
     // Focus states
     var IFocusedState by remember { mutableStateOf(false) }
     var OFocusedState by remember { mutableStateOf(false) }
 
-    fun convertLength(value: Double, fromUnit: String, toUnit: String): Double {
-        return when (fromUnit to toUnit) {
-            "Meters" to "CentiMeters" -> value * 100
-            "Meters" to "Feet" -> value * 3.28084
-            "Meters" to "MilliMeters" -> value * 1000
-            "CentiMeters" to "Meters" -> value / 100
-            "CentiMeters" to "Feet" -> value * 0.0328084
-            "CentiMeters" to "MilliMeters" -> value * 10
-            "Feet" to "Meters" -> value / 3.28084
-            "Feet" to "CentiMeters" -> value * 30.48
-            "Feet" to "MilliMeters" -> value * 304.8
-            "MilliMeters" to "Meters" -> value / 1000
-            "MilliMeters" to "CentiMeters" -> value / 10
-            "MilliMeters" to "Feet" -> value / 304.8
-            else -> value // If no conversion needed or unknown unit
+    fun convertLength(value: Double, fromUnit: String, toUnit: String): Number {
+        val valueInMeters = when (fromUnit) {
+            "Metres" -> value
+            "Centimetres" -> value / 100
+            "Feet" -> value / 3.28084
+            "Millimetres" -> value / 1000
+            else -> value
+        }
+
+        val convertedValue = when (toUnit) {
+            "Metres" -> valueInMeters
+            "Centimetres" -> valueInMeters * 100
+            "Feet" -> valueInMeters * 3.28084
+            "Millimetres" -> valueInMeters * 1000
+            else -> valueInMeters
+        }
+
+        val decimalPlaces = value.toString().substringAfter('.', "").length
+        val minDecimalPlaces = 2
+        val roundingPlaces = maxOf(decimalPlaces, minDecimalPlaces)
+
+        val factor = 10.0.pow(roundingPlaces)
+        val roundedValue = round(convertedValue * factor) / factor
+
+        return if (roundedValue % 1.0 == 0.0) {
+            roundedValue.toInt()
+        } else {
+            roundedValue
         }
     }
-
-//    fun updateInputValues(key: String) {
-//        when (tabIndex.value) {
-//            0 -> {
-//                if (isFirstInputFocused) {
-//                    lengthInputValueOne += key
-//                    lengthInputValueTwo = convertLength(
-//                        lengthInputValueOne.toDoubleOrNull() ?: 0.0,
-//                        lengthUnitFirstInput,
-//                        lengthUnitSecondInput
-//                    ).toString()
-//                } else {
-//                    lengthInputValueTwo += key
-//                    lengthInputValueOne = convertLength(
-//                        lengthInputValueTwo.toDoubleOrNull() ?: 0.0,
-//                        lengthUnitSecondInput,
-//                        lengthUnitFirstInput
-//                    ).toString()
-//                }
-//            }
-//        }
-//    }
 
     Column(
         modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceEvenly
@@ -93,17 +85,37 @@ fun LengthScreen(
                 .weight(1f),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            DropdownMenu(
-                IUnitSelectValue = IUnitSelectValue,
-                onUnitSelect = { IUnitSelectValue = it }
-            )
+            DropdownMenu(IUnitSelectValue = IUnitSelectValue, onUnitSelect = { value ->
+                IUnitSelectValue = IUnitSelectValue.copy(
+                    value = value.value, symbol = value.symbol
+                )
+
+                OInputValue = convertLength(
+                    value = IInputValue.toDouble(),
+                    fromUnit = value.value,
+                    toUnit = OUnitSelectValue.value
+                ).toString()
+            })
 
             NumberInputField(
                 modifier = Modifier.onFocusChanged { IFocusedState = it.isFocused },
                 value = IInputValue,
                 onValueChange = { string ->
-                    IInputValue = IInputValue.copy(value = string)
-                })
+                    OInputValue =
+                        if (string.isEmpty()) {
+                            ""
+                        } else {
+                            convertLength(
+                                value = string.toDoubleOrNull() ?: IInputValue.toDouble(),
+                                fromUnit = IUnitSelectValue.value,
+                                toUnit = OUnitSelectValue.value
+                            ).toString()
+                        }
+
+                    IInputValue = string
+                },
+                symbol = IUnitSelectValue.symbol
+            )
         }
 
         HorizontalDivider(
@@ -116,15 +128,37 @@ fun LengthScreen(
                 .weight(1f),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            DropdownMenu(
-                IUnitSelectValue = OUnitSelectValue,
-                onUnitSelect = { OUnitSelectValue = it }
-            )
+            DropdownMenu(IUnitSelectValue = OUnitSelectValue, onUnitSelect = { value ->
+                OUnitSelectValue = OUnitSelectValue.copy(
+                    value = value.value, symbol = value.symbol
+                )
+
+                IInputValue = convertLength(
+                    value = OInputValue.toDouble(),
+                    fromUnit = value.value,
+                    toUnit = IUnitSelectValue.value
+                ).toString()
+            })
 
             NumberInputField(
                 modifier = Modifier.onFocusChanged { OFocusedState = it.isFocused },
                 value = OInputValue,
-                onValueChange = { OInputValue = OInputValue.copy(value = it) })
+                onValueChange = { string ->
+                    IInputValue =
+                        if (string.isEmpty()) {
+                            ""
+                        } else {
+                            convertLength(
+                                value = string.toDoubleOrNull() ?: OInputValue.toDouble(),
+                                fromUnit = OUnitSelectValue.value,
+                                toUnit = IUnitSelectValue.value
+                            ).toString()
+                        }
+
+                    OInputValue = string
+                },
+                symbol = OUnitSelectValue.symbol
+            )
         }
     }
 }

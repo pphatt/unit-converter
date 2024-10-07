@@ -23,11 +23,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.unitconverter.enums.ELengthUnit
+import app.unitconverter.screen.length.InputWithUnit
 import app.unitconverter.ui.theme.LocalColorScheme
 
 @Composable
 fun DropdownMenu(
-    IUnitSelectValue: String, onUnitSelect: (String) -> Unit
+    IUnitSelectValue: InputWithUnit, onUnitSelect: (InputWithUnit) -> Unit
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -44,7 +45,7 @@ fun DropdownMenu(
             )
         ) {
             Text(
-                text = IUnitSelectValue,
+                text = IUnitSelectValue.value,
                 color = LocalColorScheme.current.foreground,
                 fontSize = 15.sp
             )
@@ -65,10 +66,10 @@ fun DropdownMenu(
                     DropdownMenuItem(text = {
                         Text(
                             text = unit.displayName,
-                            color = if (unit.name == IUnitSelectValue) LocalColorScheme.current.dropdownSelected else Color.White
+                            color = if (unit.name == IUnitSelectValue.value) LocalColorScheme.current.dropdownSelected else Color.White
                         )
                     }, onClick = {
-                        onUnitSelect(unit.name)
+                        onUnitSelect(InputWithUnit(unit.name, unit.symbol))
 
                         onDismissRequest()
                     })
