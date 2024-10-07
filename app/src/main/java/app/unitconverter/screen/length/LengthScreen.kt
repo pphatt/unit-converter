@@ -1,6 +1,7 @@
 package app.unitconverter.screen.length
 
 import android.content.ContentValues.TAG
+import android.icu.math.BigDecimal
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
 import app.unitconverter.ui.components.common.DropdownMenu
 import app.unitconverter.ui.components.common.NumberInputField
+import java.text.DecimalFormat
 import kotlin.math.pow
 import kotlin.math.round
 
@@ -73,7 +75,7 @@ fun LengthScreen(
         }
 
         val decimalPlaces = value.toString().substringAfter('.', "").length
-        val minDecimalPlaces = 2
+        val minDecimalPlaces = 5
         val roundingPlaces = maxOf(decimalPlaces, minDecimalPlaces)
 
         val factor = 10.0.pow(roundingPlaces)
