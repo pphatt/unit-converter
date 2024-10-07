@@ -1,8 +1,17 @@
 package app.unitconverter.ui.components.common
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -41,7 +50,7 @@ fun DropdownMenu(
             onClick = { isExpanded = true },
             contentPadding = PaddingValues(start = 12.dp, end = 8.dp),
             colors = ButtonDefaults.filledTonalButtonColors(
-                containerColor = Color(0xFF1B1B1B),
+                containerColor = LocalColorScheme.current.secondaryAlt,
             )
         ) {
             Text(
@@ -53,26 +62,30 @@ fun DropdownMenu(
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
                 contentDescription = "Arrow Down",
+                tint = LocalColorScheme.current.foregroundAlt
             )
         }
 
         MaterialTheme(shapes = MaterialTheme.shapes.copy(extraSmall = RoundedCornerShape(16.dp))) {
             DropdownMenu(
-                modifier = Modifier.padding(start = 10.dp, end = 10.dp),
                 expanded = isExpanded,
                 onDismissRequest = onDismissRequest
             ) {
                 ELengthUnit.entries.forEach { unit ->
-                    DropdownMenuItem(text = {
-                        Text(
-                            text = unit.displayName,
-                            color = if (unit.name == IUnitSelectValue.value) LocalColorScheme.current.dropdownSelected else Color.White
-                        )
-                    }, onClick = {
-                        onUnitSelect(InputWithUnit(unit.name, unit.symbol))
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                modifier = Modifier.padding(start = 10.dp, end = 10.dp),
+                                text = unit.displayName,
+                                color = if (unit.name == IUnitSelectValue.value)
+                                    LocalColorScheme.current.foregroundAlt3 else LocalColorScheme.current.foregroundAlt4
+                            )
+                        },
+                        onClick = {
+                            onUnitSelect(InputWithUnit(unit.name, unit.symbol))
 
-                        onDismissRequest()
-                    })
+                            onDismissRequest()
+                        })
                 }
             }
         }

@@ -1,6 +1,7 @@
 package app.unitconverter.ui.components.tabs
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,23 +20,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import app.unitconverter.ui.theme.LocalColorScheme
 import komikku.presentation.domain.enums.ETabs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun TabRowLayout(
-    scope: CoroutineScope,
-    selectedIndex: Int,
-    pagerState: PagerState
+    scope: CoroutineScope, selectedIndex: Int, pagerState: PagerState
 ) {
-    ScrollableTabRow(
-        selectedTabIndex = selectedIndex,
+    ScrollableTabRow(selectedTabIndex = selectedIndex,
         modifier = Modifier.fillMaxWidth(),
         edgePadding = 16.dp,
         indicator = {},
-        divider = {}
-    ) {
+        divider = {}) {
         ETabs.entries.forEachIndexed { index, currentTab ->
             Tab(
                 modifier = Modifier
@@ -44,12 +42,12 @@ fun TabRowLayout(
                     .height(30.dp)
                     .clip(shape = RoundedCornerShape(50))
                     .background(
-                        color = if (selectedIndex == index) Color(0xFF1B1B1B) else Color.Transparent,
+                        color = if (selectedIndex == index) LocalColorScheme.current.secondaryAlt else Color.Transparent,
                         shape = RoundedCornerShape(50)
                     ),
                 selected = selectedIndex == index,
-                selectedContentColor = MaterialTheme.colorScheme.primary,
-                unselectedContentColor = MaterialTheme.colorScheme.outline,
+                selectedContentColor = LocalColorScheme.current.foregroundAlt,
+                unselectedContentColor = LocalColorScheme.current.foregroundAlt2,
                 onClick = {
                     scope.launch {
                         pagerState.animateScrollToPage(currentTab.ordinal)

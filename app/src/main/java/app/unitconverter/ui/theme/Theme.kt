@@ -88,23 +88,51 @@ private val darkScheme = darkColorScheme(
 
 data class CustomColorScheme(
     val foreground: Color,
-    val dropdownSelected: Color,
+
+    val secondaryAlt: Color,
+
+    val foregroundAlt: Color,
+    val foregroundAlt2: Color,
+
+    val foregroundAlt3: Color,
+    val foregroundAlt4: Color,
 )
 
 private val customColorSchemeLight = CustomColorScheme(
     foreground = foregroundLight,
-    dropdownSelected = foregroundLight,
+
+    secondaryAlt = secondaryAltLight,
+
+    foregroundAlt = foregroundAltLight,
+    foregroundAlt2 = foregroundAlt2Light,
+
+    foregroundAlt3 = foregroundAlt3Light,
+    foregroundAlt4 = foregroundAlt4Light,
 )
 
 private val customColorSchemeDark = CustomColorScheme(
     foreground = foregroundDark,
-    dropdownSelected = foregroundDark,
+
+    secondaryAlt = secondaryAltDark,
+
+    foregroundAlt = foregroundAltDark,
+    foregroundAlt2 = foregroundAlt2Dark,
+
+    foregroundAlt3 = foregroundAlt3Dark,
+    foregroundAlt4 = foregroundAlt4Dark,
 )
 
 val LocalColorScheme = staticCompositionLocalOf {
     CustomColorScheme(
         foreground = Color.Unspecified,
-        dropdownSelected = Color.Unspecified,
+
+        secondaryAlt = Color.Unspecified,
+
+        foregroundAlt = Color.Unspecified,
+        foregroundAlt2 = Color.Unspecified,
+
+        foregroundAlt3 = Color.Unspecified,
+        foregroundAlt4 = Color.Unspecified,
     )
 }
 
@@ -128,8 +156,8 @@ fun UnitConverterTheme(
     }
 
     val customColorScheme = when {
-        darkTheme -> customColorSchemeLight
-        else -> customColorSchemeDark
+        darkTheme -> customColorSchemeDark
+        else -> customColorSchemeLight
     }
 
     CompositionLocalProvider(LocalColorScheme provides customColorScheme) {

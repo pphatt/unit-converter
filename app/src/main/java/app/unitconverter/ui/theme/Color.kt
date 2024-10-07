@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import app.unitconverter.ui.components.tabs.TabRowLayout
 import komikku.presentation.domain.enums.ETabs
 
-val primaryLight = Color(0xFF000000)
+val primaryLight = Color(0xFF353637)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFF262625)
 val onPrimaryContainerLight = Color(0xFFB3B0B0)
@@ -47,7 +47,7 @@ val surfaceLight = Color(0xFFFDF8F8)
 val onSurfaceLight = Color(0xFF1C1B1B)
 val surfaceVariantLight = Color(0xFFE0E3E3)
 val onSurfaceVariantLight = Color(0xFF444748)
-val outlineLight = Color(0xFF747878)
+val outlineLight = Color(0xFFbcc0c3)
 val outlineVariantLight = Color(0xFFC4C7C7)
 val scrimLight = Color(0xFF000000)
 val inverseSurfaceLight = Color(0xFF313030)
@@ -61,7 +61,15 @@ val surfaceContainerLight = Color(0xFFF1EDEC)
 val surfaceContainerHighLight = Color(0xFFEBE7E6)
 val surfaceContainerHighestLight = Color(0xFFE5E2E1)
 
-val foregroundLight = Color(0xFF7DB6D3)
+val foregroundLight = Color(0xFF1A6B97)
+
+val secondaryAltLight = Color(0xFFe1e5e8)
+
+val foregroundAltLight = Color(0xFF474b4e)
+val foregroundAlt2Light = Color(0XFFb2b6b9)
+
+val foregroundAlt3Light = Color(0XFF3c82a3)
+val foregroundAlt4Light = Color(0XFF4e4e4f)
 
 val primaryDark = Color(0xFFC9C6C5)
 val onPrimaryDark = Color(0xFF313030)
@@ -100,6 +108,14 @@ val surfaceContainerHighDark = Color(0xFF2B2A2A)
 val surfaceContainerHighestDark = Color(0xFF363434)
 
 val foregroundDark = Color(0xFF7DB6D3)
+
+val secondaryAltDark = Color(0xFF1B1B1B)
+
+val foregroundAltDark = Color(0xFFbdbdbd)
+val foregroundAlt2Dark = Color(0xFF6a6a6a)
+
+val foregroundAlt3Dark = Color(0XFF1A6B97)
+val foregroundAlt4Dark = Color(0XFFFFFFFF)
 
 @Preview(
     uiMode = UI_MODE_NIGHT_YES,
