@@ -6,3 +6,14 @@ import androidx.compose.ui.unit.dp
 object Measure {
     val buttonSpacing: Dp = 28.dp
 }
+
+data class InputWithUnit(
+    var value: String, var symbol: String, var name: String
+)
+
+interface DisplayableUnit {
+    val displayName: String
+    val name: String
+    val nameWithoutSymbol: String
+    val symbol: String
+}

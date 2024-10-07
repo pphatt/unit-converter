@@ -1,8 +1,5 @@
 package app.unitconverter.screen.length
 
-import android.content.ContentValues.TAG
-import android.icu.math.BigDecimal
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,20 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
+import app.unitconverter.enums.ELengthUnit
+import app.unitconverter.enums.InputWithUnit
 import app.unitconverter.ui.components.common.DropdownMenu
 import app.unitconverter.ui.components.common.NumberInputField
-import java.text.DecimalFormat
 import kotlin.math.pow
 import kotlin.math.round
-
-data class InputWithUnit(
-    var value: String, var symbol: String
-)
 
 @Composable
 fun LengthScreen(
@@ -36,11 +29,11 @@ fun LengthScreen(
 
     // LengthScreen unit state
     var IUnitSelectValue by remember {
-        mutableStateOf(InputWithUnit("Metres", "m"))
+        mutableStateOf(InputWithUnit("Metres", "m", "Metres"))
     }
 
     var OUnitSelectValue by remember {
-        mutableStateOf(InputWithUnit("Centimetres", "cm"))
+        mutableStateOf(InputWithUnit("Centimetres", "cm", "Centimetres"))
     }
 
     // Focus states
@@ -97,32 +90,34 @@ fun LengthScreen(
                 .weight(1f),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            DropdownMenu(IUnitSelectValue = IUnitSelectValue, onUnitSelect = { value ->
-                IUnitSelectValue = IUnitSelectValue.copy(
-                    value = value.value, symbol = value.symbol
-                )
+            DropdownMenu(
+                enumEntries = ELengthUnit.entries.toTypedArray(),
+                IUnitSelectValue = IUnitSelectValue,
+                onUnitSelect = { value ->
+                    IUnitSelectValue = IUnitSelectValue.copy(
+                        value = value.value, symbol = value.symbol
+                    )
 
-                OInputValue = convertLength(
-                    value = IInputValue.toDouble(),
-                    fromUnit = value.value,
-                    toUnit = OUnitSelectValue.value
-                ).toString()
-            })
+                    OInputValue = convertLength(
+                        value = IInputValue.toDouble(),
+                        fromUnit = value.value,
+                        toUnit = OUnitSelectValue.value
+                    ).toString()
+                })
 
             NumberInputField(
                 modifier = Modifier.onFocusChanged { IFocusedState = it.isFocused },
                 value = IInputValue,
                 onValueChange = { string ->
-                    OInputValue =
-                        if (string.isEmpty()) {
-                            ""
-                        } else {
-                            convertLength(
-                                value = string.toDoubleOrNull() ?: IInputValue.toDouble(),
-                                fromUnit = IUnitSelectValue.value,
-                                toUnit = OUnitSelectValue.value
-                            ).toString()
-                        }
+                    OInputValue = if (string.isEmpty()) {
+                        ""
+                    } else {
+                        convertLength(
+                            value = string.toDoubleOrNull() ?: IInputValue.toDouble(),
+                            fromUnit = IUnitSelectValue.value,
+                            toUnit = OUnitSelectValue.value
+                        ).toString()
+                    }
 
                     IInputValue = string
                 },
@@ -140,32 +135,34 @@ fun LengthScreen(
                 .weight(1f),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            DropdownMenu(IUnitSelectValue = OUnitSelectValue, onUnitSelect = { value ->
-                OUnitSelectValue = OUnitSelectValue.copy(
-                    value = value.value, symbol = value.symbol
-                )
+            DropdownMenu(
+                enumEntries = ELengthUnit.entries.toTypedArray(),
+                IUnitSelectValue = OUnitSelectValue,
+                onUnitSelect = { value ->
+                    OUnitSelectValue = OUnitSelectValue.copy(
+                        value = value.value, symbol = value.symbol
+                    )
 
-                IInputValue = convertLength(
-                    value = OInputValue.toDouble(),
-                    fromUnit = value.value,
-                    toUnit = IUnitSelectValue.value
-                ).toString()
-            })
+                    IInputValue = convertLength(
+                        value = OInputValue.toDouble(),
+                        fromUnit = value.value,
+                        toUnit = IUnitSelectValue.value
+                    ).toString()
+                })
 
             NumberInputField(
                 modifier = Modifier.onFocusChanged { OFocusedState = it.isFocused },
                 value = OInputValue,
                 onValueChange = { string ->
-                    IInputValue =
-                        if (string.isEmpty()) {
-                            ""
-                        } else {
-                            convertLength(
-                                value = string.toDoubleOrNull() ?: OInputValue.toDouble(),
-                                fromUnit = OUnitSelectValue.value,
-                                toUnit = IUnitSelectValue.value
-                            ).toString()
-                        }
+                    IInputValue = if (string.isEmpty()) {
+                        ""
+                    } else {
+                        convertLength(
+                            value = string.toDoubleOrNull() ?: OInputValue.toDouble(),
+                            fromUnit = OUnitSelectValue.value,
+                            toUnit = IUnitSelectValue.value
+                        ).toString()
+                    }
 
                     OInputValue = string
                 },

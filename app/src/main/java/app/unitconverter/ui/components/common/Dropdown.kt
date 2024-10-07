@@ -1,17 +1,8 @@
 package app.unitconverter.ui.components.common
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -28,16 +19,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.unitconverter.enums.DisplayableUnit
 import app.unitconverter.enums.ELengthUnit
-import app.unitconverter.screen.length.InputWithUnit
+import app.unitconverter.enums.InputWithUnit
 import app.unitconverter.ui.theme.LocalColorScheme
+import kotlin.enums.EnumEntries
 
 @Composable
-fun DropdownMenu(
-    IUnitSelectValue: InputWithUnit, onUnitSelect: (InputWithUnit) -> Unit
+fun <T> DropdownMenu(
+    enumEntries: Array<T>,
+    IUnitSelectValue: InputWithUnit,
+    onUnitSelect: (InputWithUnit) -> Unit
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -54,7 +48,7 @@ fun DropdownMenu(
             )
         ) {
             Text(
-                text = IUnitSelectValue.value,
+                text = IUnitSelectValue.name,
                 color = LocalColorScheme.current.foreground,
                 fontSize = 15.sp
             )
@@ -71,7 +65,9 @@ fun DropdownMenu(
                 expanded = isExpanded,
                 onDismissRequest = onDismissRequest
             ) {
-                ELengthUnit.entries.forEach { unit ->
+                enumEntries.forEach { unit ->
+                    unit as DisplayableUnit
+
                     DropdownMenuItem(
                         text = {
                             Text(
@@ -82,7 +78,13 @@ fun DropdownMenu(
                             )
                         },
                         onClick = {
-                            onUnitSelect(InputWithUnit(unit.name, unit.symbol))
+                            onUnitSelect(
+                                InputWithUnit(
+                                    unit.name,
+                                    unit.symbol,
+                                    unit.nameWithoutSymbol
+                                )
+                            )
 
                             onDismissRequest()
                         })

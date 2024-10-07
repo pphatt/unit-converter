@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,22 +21,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import app.unitconverter.screen.area.AreaScreen
 import app.unitconverter.screen.length.LengthScreen
-import app.unitconverter.ui.components.common.KeyboardLayout
 import app.unitconverter.ui.components.tabs.TabRowLayout
 import app.unitconverter.ui.theme.UnitConverterTheme
 import komikku.presentation.domain.enums.ETabs
@@ -104,7 +95,9 @@ class MainActivity : ComponentActivity() {
                                         }
 
                                         1 -> {
-                                            AreaScreen(modifier = Modifier.weight(1f))
+                                            AreaScreen(
+                                                modifier = Modifier.weight(1f)
+                                            )
                                         }
                                     }
 
