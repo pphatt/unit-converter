@@ -95,7 +95,9 @@ fun AreaScreen(
                 IUnitSelectValue = IUnitSelectValue,
                 onUnitSelect = { value ->
                     IUnitSelectValue = IUnitSelectValue.copy(
-                        value = value.value, symbol = value.symbol
+                        value = value.value,
+                        symbol = value.symbol,
+                        name = value.name
                     )
 
                     OInputValue = convertArea(
@@ -141,7 +143,9 @@ fun AreaScreen(
                 IUnitSelectValue = OUnitSelectValue,
                 onUnitSelect = { value ->
                     OUnitSelectValue = OUnitSelectValue.copy(
-                        value = value.value, symbol = value.symbol
+                        value = value.value,
+                        symbol = value.symbol,
+                        name = value.name
                     )
 
                     IInputValue = convertArea(

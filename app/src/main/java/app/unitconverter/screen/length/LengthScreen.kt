@@ -90,13 +90,16 @@ fun LengthScreen(
                 .weight(1f),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            DropdownMenu(
-                enumEntries = ELengthUnit.entries.toTypedArray(),
+            DropdownMenu(enumEntries = ELengthUnit.entries.toTypedArray(),
                 IUnitSelectValue = IUnitSelectValue,
                 onUnitSelect = { value ->
                     IUnitSelectValue = IUnitSelectValue.copy(
-                        value = value.value, symbol = value.symbol
+                        value = value.value, symbol = value.symbol, name = value.name
                     )
+
+                    if (IInputValue.isEmpty() || OInputValue.isEmpty()) {
+                        return@DropdownMenu
+                    }
 
                     OInputValue = convertLength(
                         value = IInputValue.toDouble(),
@@ -135,13 +138,18 @@ fun LengthScreen(
                 .weight(1f),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            DropdownMenu(
-                enumEntries = ELengthUnit.entries.toTypedArray(),
+            DropdownMenu(enumEntries = ELengthUnit.entries.toTypedArray(),
                 IUnitSelectValue = OUnitSelectValue,
                 onUnitSelect = { value ->
                     OUnitSelectValue = OUnitSelectValue.copy(
-                        value = value.value, symbol = value.symbol
+                        value = value.value,
+                        symbol = value.symbol,
+                        name = value.name
                     )
+
+                    if (IInputValue.isEmpty() || OInputValue.isEmpty()) {
+                        return@DropdownMenu
+                    }
 
                     IInputValue = convertLength(
                         value = OInputValue.toDouble(),
