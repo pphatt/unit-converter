@@ -13,8 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
 import app.unitconverter.enums.EAreaUnit
-import app.unitconverter.enums.ELengthUnit
-import app.unitconverter.enums.InputWithUnit
+import app.unitconverter.enums.UnitInput
 import app.unitconverter.ui.components.common.DropdownMenu
 import app.unitconverter.ui.components.common.NumberInputField
 import kotlin.math.pow
@@ -30,11 +29,11 @@ fun AreaScreen(
 
     // LengthScreen unit state
     var IUnitSelectValue by remember {
-        mutableStateOf(InputWithUnit("MetersSquared", "m²", "Meters Squared"))
+        mutableStateOf(UnitInput("MetersSquared", "m²", "Meters Squared"))
     }
 
     var OUnitSelectValue by remember {
-        mutableStateOf(InputWithUnit("CentimetresSquared", "cm²", "Centimetres Squared"))
+        mutableStateOf(UnitInput("CentimetresSquared", "cm²", "Centimetres Squared"))
     }
 
     // Focus states
@@ -92,7 +91,7 @@ fun AreaScreen(
         ) {
             DropdownMenu(
                 enumEntries = EAreaUnit.entries.toTypedArray(),
-                IUnitSelectValue = IUnitSelectValue,
+                unitSelectValue = IUnitSelectValue,
                 onUnitSelect = { value ->
                     IUnitSelectValue = IUnitSelectValue.copy(
                         value = value.value,
@@ -140,7 +139,7 @@ fun AreaScreen(
         ) {
             DropdownMenu(
                 enumEntries = EAreaUnit.entries.toTypedArray(),
-                IUnitSelectValue = OUnitSelectValue,
+                unitSelectValue = OUnitSelectValue,
                 onUnitSelect = { value ->
                     OUnitSelectValue = OUnitSelectValue.copy(
                         value = value.value,

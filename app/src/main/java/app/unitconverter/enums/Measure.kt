@@ -7,7 +7,7 @@ object Measure {
     val buttonSpacing: Dp = 28.dp
 }
 
-data class InputWithUnit(
+data class UnitInput(
     var value: String, var symbol: String, var name: String
 )
 

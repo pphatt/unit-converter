@@ -22,16 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.unitconverter.enums.DisplayableUnit
-import app.unitconverter.enums.ELengthUnit
-import app.unitconverter.enums.InputWithUnit
+import app.unitconverter.enums.UnitInput
 import app.unitconverter.ui.theme.LocalColorScheme
-import kotlin.enums.EnumEntries
 
 @Composable
 fun <T> DropdownMenu(
     enumEntries: Array<T>,
-    IUnitSelectValue: InputWithUnit,
-    onUnitSelect: (InputWithUnit) -> Unit
+    unitSelectValue: UnitInput,
+    onUnitSelect: (UnitInput) -> Unit
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -48,7 +46,7 @@ fun <T> DropdownMenu(
             )
         ) {
             Text(
-                text = IUnitSelectValue.name,
+                text = unitSelectValue.name,
                 color = LocalColorScheme.current.foreground,
                 fontSize = 15.sp
             )
@@ -73,13 +71,13 @@ fun <T> DropdownMenu(
                             Text(
                                 modifier = Modifier.padding(start = 10.dp, end = 10.dp),
                                 text = unit.displayName,
-                                color = if (unit.name == IUnitSelectValue.value)
+                                color = if (unit.name == unitSelectValue.value)
                                     LocalColorScheme.current.foregroundAlt3 else LocalColorScheme.current.foregroundAlt4
                             )
                         },
                         onClick = {
                             onUnitSelect(
-                                InputWithUnit(
+                                UnitInput(
                                     unit.name,
                                     unit.symbol,
                                     unit.nameWithoutSymbol

@@ -3,6 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.android.application)
     alias(kotlinx.plugins.jetbrains.kotlin.android)
+
+    alias(libs.plugins.google.dagger.hilt.android)
+    alias(libs.plugins.google.devtools.ksp)
 }
 
 android {
@@ -98,6 +101,8 @@ dependencies {
 
     implementation(androidx.bundles.lifecycle)
 
+    implementation(androidx.work.runtime)
+
     // UI library
     implementation(libs.material)
 
@@ -108,6 +113,15 @@ dependencies {
     implementation(libs.retrofit2.converter.moshi)
 
     implementation(libs.bundles.okhttp)
+
+    // Dagger - Hilt
+    ksp(libs.androidx.hilt.compiler)
+    ksp(libs.google.hilt.android.compiler)
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.google.hilt.android)
+    implementation(libs.google.hilt.android.testing)
+    implementation(libs.google.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Tests
     testImplementation(libs.bundles.test)
@@ -128,4 +142,8 @@ tasks {
             "-opt-in=androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi",
         )
     }
+}
+
+hilt {
+    enableAggregatingTask = false
 }
