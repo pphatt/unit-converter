@@ -81,6 +81,8 @@ class AreaScreenViewModel @Inject constructor() : ViewModel() {
                         toUnit = state.oUnitSelectValue.value
                     )
                 )
+            } else {
+                setOInputValue("")
             }
 
             return
@@ -96,6 +98,8 @@ class AreaScreenViewModel @Inject constructor() : ViewModel() {
                     toUnit = state.iUnitSelectValue.value
                 )
             )
+        } else {
+            setIInputValue("")
         }
     }
 
@@ -111,6 +115,8 @@ class AreaScreenViewModel @Inject constructor() : ViewModel() {
                         toUnit = state.oUnitSelectValue.value
                     )
                 )
+            } else {
+                setOInputValue("")
             }
 
             return
@@ -126,6 +132,8 @@ class AreaScreenViewModel @Inject constructor() : ViewModel() {
                     toUnit = state.iUnitSelectValue.value
                 )
             )
+        } else {
+            setIInputValue("")
         }
     }
 
