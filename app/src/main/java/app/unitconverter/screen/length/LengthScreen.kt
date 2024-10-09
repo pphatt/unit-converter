@@ -5,12 +5,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,6 +30,8 @@ fun LengthScreen(
     modifier: Modifier,
 ) {
     val state = viewModel.uiState.collectAsState().value
+
+    val focusRequester = remember { FocusRequester() }
 
     Column(
         modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceEvenly
@@ -53,21 +58,25 @@ fun LengthScreen(
                     }
 
                     viewModel.execute(
-                        ViewAction.HandleConvertWhenSelect(type = LengthScreenViewModel.ETypes.I)
+                        ViewAction.HandleConvertWhenSelect
                     )
                 })
 
             NumberInputField(
-                value = state.iInputValue, onValueChange = { stringValue ->
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { viewModel.execute(ViewAction.SetIFocused(it.isFocused)) },
+                value = state.iInputValue,
+                onValueChange = { stringValue ->
                     viewModel.execute(
                         ViewAction.HandleConvertWhenInput(
-                            value = stringValue,
-                            type = LengthScreenViewModel.ETypes.I
+                            value = stringValue, type = LengthScreenViewModel.ETypes.I
                         )
                     )
 
                     viewModel.execute(ViewAction.SetIInputValue(value = stringValue))
-                }, symbol = state.iUnitSelectValue.symbol
+                },
+                symbol = state.iUnitSelectValue.symbol
             )
         }
 
@@ -97,22 +106,29 @@ fun LengthScreen(
                     }
 
                     viewModel.execute(
-                        ViewAction.HandleConvertWhenSelect(type = LengthScreenViewModel.ETypes.O)
+                        ViewAction.HandleConvertWhenSelect
                     )
                 })
 
             NumberInputField(
-                value = state.oInputValue, onValueChange = { stringValue ->
+                modifier = Modifier.onFocusChanged { viewModel.execute(ViewAction.SetOFocused(it.isFocused)) },
+                value = state.oInputValue,
+                onValueChange = { stringValue ->
                     viewModel.execute(
                         ViewAction.HandleConvertWhenInput(
-                            value = stringValue,
-                            type = LengthScreenViewModel.ETypes.O
+                            value = stringValue, type = LengthScreenViewModel.ETypes.O
                         )
                     )
 
                     viewModel.execute(ViewAction.SetOInputValue(value = stringValue))
-                }, symbol = state.oUnitSelectValue.symbol
+                },
+                symbol = state.oUnitSelectValue.symbol
             )
         }
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+        viewModel.execute(ViewAction.SetIFocused(value = true))
     }
 }

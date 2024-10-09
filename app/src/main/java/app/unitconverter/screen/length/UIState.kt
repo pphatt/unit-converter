@@ -6,7 +6,9 @@ data class UIState(
     val iInputValue: String,
     val oInputValue: String,
     val iUnitSelectValue: UnitInput,
-    val oUnitSelectValue: UnitInput
+    val oUnitSelectValue: UnitInput,
+    val iFocusedState: Boolean,
+    val oFocusedState: Boolean,
 ) {
     companion object {
         val default = UIState(
@@ -15,6 +17,9 @@ data class UIState(
 
             iUnitSelectValue = UnitInput("Metres", "m", "Metres"),
             oUnitSelectValue = UnitInput("Centimetres", "cm", "Centimetres"),
+
+            iFocusedState = false,
+            oFocusedState = false,
         )
     }
 }

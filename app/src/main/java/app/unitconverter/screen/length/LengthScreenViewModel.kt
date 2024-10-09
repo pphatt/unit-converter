@@ -28,12 +28,14 @@ class LengthScreenViewModel @Inject constructor() : ViewModel() {
             is ViewAction.SetIUnitSelectValue -> setIUnitSelectValue(action.value)
             is ViewAction.SetOUnitSelectValue -> setOUnitSelectValue(action.value)
 
+            is ViewAction.SetIFocused -> setIFocused(action.value)
+            is ViewAction.SetOFocused -> setOFocused(action.value)
+
             is ViewAction.HandleConvertWhenInput -> handleConvertWhenInput(
-                value = action.value,
-                type = action.type
+                value = action.value, type = action.type
             )
 
-            is ViewAction.HandleConvertWhenSelect -> handleConvertWhenSelect(type = action.type)
+            ViewAction.HandleConvertWhenSelect -> handleConvertWhenSelect()
         }
     }
 
@@ -65,9 +67,16 @@ class LengthScreenViewModel @Inject constructor() : ViewModel() {
         state = state.copy(oUnitSelectValue = value)
     }
 
+    private fun setIFocused(value: Boolean) {
+        state = state.copy(iFocusedState = value)
+    }
+
+    private fun setOFocused(value: Boolean) {
+        state = state.copy(oFocusedState = value)
+    }
+
     enum class ETypes {
-        I,
-        O
+        I, O
     }
 
     private fun handleConvertWhenInput(value: String, type: ETypes) {
@@ -95,8 +104,8 @@ class LengthScreenViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun handleConvertWhenSelect(type: ETypes) {
-        if (type == ETypes.I) {
+    private fun handleConvertWhenSelect() {
+        if (state.iFocusedState) {
             setOInputValue(
                 value = convertLength(
                     value = state.iInputValue.toDouble(),
