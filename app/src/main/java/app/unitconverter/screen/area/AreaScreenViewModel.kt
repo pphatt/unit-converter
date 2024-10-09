@@ -1,4 +1,4 @@
-package app.unitconverter.screen.length
+package app.unitconverter.screen.area
 
 import androidx.lifecycle.ViewModel
 import app.unitconverter.enums.ETypes
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class LengthScreenViewModel @Inject constructor() : ViewModel() {
+class AreaScreenViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(UIState.default)
     val uiState = _uiState.asStateFlow()
     private var state: UIState
@@ -75,7 +75,7 @@ class LengthScreenViewModel @Inject constructor() : ViewModel() {
 
             if (exactValue != null) {
                 setOInputValue(
-                    value = convertLength(
+                    value = convertArea(
                         value = exactValue,
                         fromUnit = state.iUnitSelectValue.value,
                         toUnit = state.oUnitSelectValue.value
@@ -90,7 +90,7 @@ class LengthScreenViewModel @Inject constructor() : ViewModel() {
 
         if (exactValue != null) {
             setIInputValue(
-                value = convertLength(
+                value = convertArea(
                     value = exactValue,
                     fromUnit = state.oUnitSelectValue.value,
                     toUnit = state.iUnitSelectValue.value
@@ -105,7 +105,7 @@ class LengthScreenViewModel @Inject constructor() : ViewModel() {
 
             if (exactValue != null) {
                 setOInputValue(
-                    value = convertLength(
+                    value = convertArea(
                         value = exactValue,
                         fromUnit = state.iUnitSelectValue.value,
                         toUnit = state.oUnitSelectValue.value
@@ -120,7 +120,7 @@ class LengthScreenViewModel @Inject constructor() : ViewModel() {
 
         if (exactValue != null) {
             setIInputValue(
-                value = convertLength(
+                value = convertArea(
                     value = exactValue,
                     fromUnit = state.oUnitSelectValue.value,
                     toUnit = state.iUnitSelectValue.value
@@ -129,31 +129,27 @@ class LengthScreenViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun convertLength(value: Double, fromUnit: String, toUnit: String): String {
-        val valueInMeters = when (fromUnit) {
-            "Metres" -> value
-            "Centimetres" -> value / 100
-            "Feet" -> value / 3.28084
-            "Millimetres" -> value / 1000
-            "Kilometres" -> value * 1000
-            "Inches" -> value / 39.3701
-            "Yards" -> value / 1.09361
-            "Miles" -> value * 1609.34
-            "NauticalMiles" -> value * 1852
+    private fun convertArea(value: Double, fromUnit: String, toUnit: String): String {
+        val valueInSquareMeters = when (fromUnit) {
+            "Acre" -> value * 4046.86
+            "Are" -> value * 100
+            "Hectare" -> value * 10000
+            "CentimetresSquared" -> value / 10000
+            "FeetSquared" -> value / 10.7639
+            "InchesSquared" -> value / 1550.0031
+            "MetersSquared" -> value
             else -> value
         }
 
         val convertedValue = when (toUnit) {
-            "Metres" -> valueInMeters
-            "Centimetres" -> valueInMeters * 100
-            "Feet" -> valueInMeters * 3.28084
-            "Millimetres" -> valueInMeters * 1000
-            "Kilometres" -> valueInMeters / 1000
-            "Inches" -> valueInMeters * 39.3701
-            "Yards" -> valueInMeters * 1.09361
-            "Miles" -> valueInMeters / 1609.34
-            "NauticalMiles" -> valueInMeters / 1852
-            else -> valueInMeters
+            "Acre" -> valueInSquareMeters / 4046.86
+            "Are" -> valueInSquareMeters / 100
+            "Hectare" -> valueInSquareMeters / 10000
+            "CentimetresSquared" -> valueInSquareMeters * 10000
+            "FeetSquared" -> valueInSquareMeters * 10.7639
+            "InchesSquared" -> valueInSquareMeters * 1550.0031
+            "MetersSquared" -> valueInSquareMeters
+            else -> valueInSquareMeters
         }
 
         val result = convertedValue.toBigDecimal().stripTrailingZeros()

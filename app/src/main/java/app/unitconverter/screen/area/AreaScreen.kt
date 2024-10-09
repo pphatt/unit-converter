@@ -5,80 +5,29 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import app.unitconverter.enums.EAreaUnit
+import app.unitconverter.enums.ETypes
 import app.unitconverter.enums.UnitInput
 import app.unitconverter.ui.components.common.DropdownMenu
 import app.unitconverter.ui.components.common.NumberInputField
-import kotlin.math.pow
-import kotlin.math.round
 
 @Composable
 fun AreaScreen(
+    viewModel: AreaScreenViewModel = hiltViewModel(),
     modifier: Modifier
 ) {
-    // LengthScreen inputs state
-    var IInputValue by remember { mutableStateOf("1") }
-    var OInputValue by remember { mutableStateOf("10000") }
+    val state = viewModel.uiState.collectAsState().value
 
-    // LengthScreen unit state
-    var IUnitSelectValue by remember {
-        mutableStateOf(UnitInput("MetersSquared", "m²", "Meters Squared"))
-    }
-
-    var OUnitSelectValue by remember {
-        mutableStateOf(UnitInput("CentimetresSquared", "cm²", "Centimetres Squared"))
-    }
-
-    // Focus states
-    var IFocusedState by remember { mutableStateOf(false) }
-    var OFocusedState by remember { mutableStateOf(false) }
-
-    fun convertArea(value: Double, fromUnit: String, toUnit: String): Number {
-        // First, convert the input value to square meters
-        val valueInSquareMeters = when (fromUnit) {
-            "Acre" -> value * 4046.86
-            "Are" -> value * 100
-            "Hectare" -> value * 10000
-            "CentimetresSquared" -> value / 10000
-            "FeetSquared" -> value / 10.7639
-            "InchesSquared" -> value / 1550.0031
-            "MetersSquared" -> value
-            else -> value
-        }
-
-        // Then, convert the value from square meters to the desired unit
-        val convertedValue = when (toUnit) {
-            "Acre" -> valueInSquareMeters / 4046.86
-            "Are" -> valueInSquareMeters / 100
-            "Hectare" -> valueInSquareMeters / 10000
-            "CentimetresSquared" -> valueInSquareMeters * 10000
-            "FeetSquared" -> valueInSquareMeters * 10.7639
-            "InchesSquared" -> valueInSquareMeters * 1550.0031
-            "MetersSquared" -> valueInSquareMeters
-            else -> valueInSquareMeters
-        }
-
-        // Rounding logic
-        val decimalPlaces = value.toString().substringAfter('.', "").length
-        val minDecimalPlaces = 5
-        val roundingPlaces = maxOf(decimalPlaces, minDecimalPlaces)
-
-        val factor = 10.0.pow(roundingPlaces)
-        val roundedValue = round(convertedValue * factor) / factor
-
-        return if (roundedValue % 1.0 == 0.0) {
-            roundedValue.toInt()
-        } else {
-            roundedValue
-        }
-    }
+    val focusRequester = remember { FocusRequester() }
 
     Column(
         modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceEvenly
@@ -89,41 +38,41 @@ fun AreaScreen(
                 .weight(1f),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            DropdownMenu(
-                enumEntries = EAreaUnit.entries.toTypedArray(),
-                unitSelectValue = IUnitSelectValue,
-                onUnitSelect = { value ->
-                    IUnitSelectValue = IUnitSelectValue.copy(
-                        value = value.value,
-                        symbol = value.symbol,
-                        name = value.name
+            DropdownMenu(enumEntries = EAreaUnit.entries.toTypedArray(),
+                unitSelectValue = state.iUnitSelectValue,
+                onUnitSelect = { unit ->
+                    viewModel.execute(
+                        ViewAction.SetIUnitSelectValue(
+                            value = UnitInput(
+                                value = unit.value, symbol = unit.symbol, name = unit.name
+                            )
+                        )
                     )
 
-                    OInputValue = convertArea(
-                        value = IInputValue.toDouble(),
-                        fromUnit = value.value,
-                        toUnit = OUnitSelectValue.value
-                    ).toString()
+                    if (state.iInputValue.isEmpty() || state.oInputValue.isEmpty()) {
+                        return@DropdownMenu
+                    }
+
+                    viewModel.execute(
+                        ViewAction.HandleConvertWhenSelect
+                    )
                 })
 
             NumberInputField(
-                modifier = Modifier.onFocusChanged { IFocusedState = it.isFocused },
-                value = IInputValue,
-                onValueChange = { string ->
-                    OInputValue =
-                        if (string.isEmpty()) {
-                            ""
-                        } else {
-                            convertArea(
-                                value = string.toDoubleOrNull() ?: IInputValue.toDouble(),
-                                fromUnit = IUnitSelectValue.value,
-                                toUnit = OUnitSelectValue.value
-                            ).toString()
-                        }
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { viewModel.execute(ViewAction.SetIFocused(it.isFocused)) },
+                value = state.iInputValue,
+                onValueChange = { stringValue ->
+                    viewModel.execute(
+                        ViewAction.HandleConvertWhenInput(
+                            value = stringValue, type = ETypes.I
+                        )
+                    )
 
-                    IInputValue = string
+                    viewModel.execute(ViewAction.SetIInputValue(value = stringValue))
                 },
-                symbol = IUnitSelectValue.symbol
+                symbol = state.iUnitSelectValue.symbol
             )
         }
 
@@ -137,42 +86,45 @@ fun AreaScreen(
                 .weight(1f),
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            DropdownMenu(
-                enumEntries = EAreaUnit.entries.toTypedArray(),
-                unitSelectValue = OUnitSelectValue,
-                onUnitSelect = { value ->
-                    OUnitSelectValue = OUnitSelectValue.copy(
-                        value = value.value,
-                        symbol = value.symbol,
-                        name = value.name
+            DropdownMenu(enumEntries = EAreaUnit.entries.toTypedArray(),
+                unitSelectValue = state.oUnitSelectValue,
+                onUnitSelect = { unit ->
+                    viewModel.execute(
+                        ViewAction.SetOUnitSelectValue(
+                            value = UnitInput(
+                                value = unit.value, symbol = unit.symbol, name = unit.name
+                            )
+                        )
                     )
 
-                    IInputValue = convertArea(
-                        value = OInputValue.toDouble(),
-                        fromUnit = value.value,
-                        toUnit = IUnitSelectValue.value
-                    ).toString()
+                    if (state.iInputValue.isEmpty() || state.oInputValue.isEmpty()) {
+                        return@DropdownMenu
+                    }
+
+                    viewModel.execute(
+                        ViewAction.HandleConvertWhenSelect
+                    )
                 })
 
             NumberInputField(
-                modifier = Modifier.onFocusChanged { OFocusedState = it.isFocused },
-                value = OInputValue,
-                onValueChange = { string ->
-                    IInputValue =
-                        if (string.isEmpty()) {
-                            ""
-                        } else {
-                            convertArea(
-                                value = string.toDoubleOrNull() ?: OInputValue.toDouble(),
-                                fromUnit = OUnitSelectValue.value,
-                                toUnit = IUnitSelectValue.value
-                            ).toString()
-                        }
+                modifier = Modifier.onFocusChanged { viewModel.execute(ViewAction.SetOFocused(it.isFocused)) },
+                value = state.oInputValue,
+                onValueChange = { stringValue ->
+                    viewModel.execute(
+                        ViewAction.HandleConvertWhenInput(
+                            value = stringValue, type = ETypes.O
+                        )
+                    )
 
-                    OInputValue = string
+                    viewModel.execute(ViewAction.SetOInputValue(value = stringValue))
                 },
-                symbol = OUnitSelectValue.symbol
+                symbol = state.oUnitSelectValue.symbol
             )
         }
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+        viewModel.execute(ViewAction.SetIFocused(value = true))
     }
 }

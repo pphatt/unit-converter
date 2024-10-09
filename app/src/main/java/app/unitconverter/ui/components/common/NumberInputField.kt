@@ -24,41 +24,67 @@ import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.unitconverter.ui.theme.LocalColorScheme
+import app.unitconverter.utils.validateInput
 
 @Composable
 fun NumberInputField(
-    modifier: Modifier = Modifier,
-    value: String,
-    onValueChange: (String) -> Unit,
-    symbol: String
+    modifier: Modifier = Modifier, value: String, onValueChange: (String) -> Unit, symbol: String
 ) {
     val context = LocalContext.current
 
     Row(
-        horizontalArrangement = Arrangement.End,
-        verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically
     ) {
         OutlinedTextField(
-            modifier = modifier
-                .weight(1f),
-            value = value,
-            onValueChange = { newValue ->
-                val pattern = Regex("^\\d*[.]?\\d*$")
+            modifier = modifier.weight(1f), value = value, onValueChange = { newValue ->
+                val pattern = Regex("^\\d*\\.?\\d*([eE][+-]?\\d*)?$")
 
-                if (newValue.isEmpty() || newValue.matches(pattern)) {
+                if (newValue.isEmpty()) {
                     onValueChange(newValue)
-                } else {
-                    Toast.makeText(context, "Invalid input type (only digit and dot)", Toast.LENGTH_LONG).show()
+                    return@OutlinedTextField
                 }
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.Transparent,
-                unfocusedBorderColor = Color.Transparent
-            ),
-            keyboardOptions = KeyboardOptions(
+
+                if (!newValue.matches(pattern)) {
+                    Toast.makeText(
+                        context,
+                        "Invalid input type (only digits and dot allowed)",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    return@OutlinedTextField
+                }
+
+                if (!validateInput(newValue)) {
+                    Toast.makeText(
+                        context,
+                        "Number cannot exceed 16 digits in decimal or scientific notation",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    return@OutlinedTextField
+                }
+
+                if ((newValue.toBigDecimalOrNull()?.stripTrailingZeros()?.toPlainString()?.length
+                        ?: newValue.length) > 20
+                ) {
+                    Toast.makeText(context, "Invalid input", Toast.LENGTH_LONG).show()
+
+                    return@OutlinedTextField
+                }
+
+                if (newValue.replace(".", "").length > 15) {
+                    Toast.makeText(context, "Cannot take more than 15 digits", Toast.LENGTH_LONG)
+                        .show()
+
+                    return@OutlinedTextField
+                }
+
+                onValueChange(newValue)
+            }, colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Transparent, unfocusedBorderColor = Color.Transparent
+            ), keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
-            ),
-            textStyle = TextStyle.Default.copy(
+            ), textStyle = TextStyle.Default.copy(
                 color = LocalColorScheme.current.foreground,
                 fontSize = 30.sp,
             )

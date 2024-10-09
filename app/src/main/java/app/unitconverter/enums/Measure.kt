@@ -17,3 +17,7 @@ interface DisplayableUnit {
     val nameWithoutSymbol: String
     val symbol: String
 }
+
+enum class ETypes {
+    I, O
+}

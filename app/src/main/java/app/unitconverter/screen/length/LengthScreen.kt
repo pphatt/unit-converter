@@ -7,10 +7,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -18,11 +15,10 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.unitconverter.enums.ELengthUnit
+import app.unitconverter.enums.ETypes
 import app.unitconverter.enums.UnitInput
 import app.unitconverter.ui.components.common.DropdownMenu
 import app.unitconverter.ui.components.common.NumberInputField
-import kotlin.math.pow
-import kotlin.math.round
 
 @Composable
 fun LengthScreen(
@@ -70,7 +66,7 @@ fun LengthScreen(
                 onValueChange = { stringValue ->
                     viewModel.execute(
                         ViewAction.HandleConvertWhenInput(
-                            value = stringValue, type = LengthScreenViewModel.ETypes.I
+                            value = stringValue, type = ETypes.I
                         )
                     )
 
@@ -116,7 +112,7 @@ fun LengthScreen(
                 onValueChange = { stringValue ->
                     viewModel.execute(
                         ViewAction.HandleConvertWhenInput(
-                            value = stringValue, type = LengthScreenViewModel.ETypes.O
+                            value = stringValue, type = ETypes.O
                         )
                     )
 
