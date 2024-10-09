@@ -27,8 +27,6 @@ fun LengthScreen(
 ) {
     val state = viewModel.uiState.collectAsState().value
 
-    val focusRequester = remember { FocusRequester() }
-
     Column(
         modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceEvenly
     ) {
@@ -60,7 +58,6 @@ fun LengthScreen(
 
             NumberInputField(
                 modifier = Modifier
-                    .focusRequester(focusRequester)
                     .onFocusChanged { viewModel.execute(ViewAction.SetIFocused(it.isFocused)) },
                 value = state.iInputValue,
                 onValueChange = { stringValue ->
@@ -121,10 +118,5 @@ fun LengthScreen(
                 symbol = state.oUnitSelectValue.symbol
             )
         }
-    }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-        viewModel.execute(ViewAction.SetIFocused(value = true))
     }
 }
